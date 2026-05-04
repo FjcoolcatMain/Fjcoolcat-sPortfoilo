@@ -1,44 +1,109 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Website</title>
+  <title>My Portfolio</title>
   <style>
-    body { font-family: Arial; text-align: center; margin-top: 80px; }
-    #adminPanel { display: none; margin-top: 20px; }
-    input { padding: 10px; margin: 5px; }
-    button { padding: 10px 15px; cursor: pointer; }
+    body { font-family: Arial; margin: 0; padding: 0; }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    section {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .box {
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-top: 10px;
+    }
+
+    #editor {
+      display: none;
+      margin-top: 20px;
+      background: #f4f4f4;
+      padding: 15px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
   </style>
 </head>
+
 <body>
 
-<h1>Welcome to My Website</h1>
+<header>
+  <h1>My Portfolio</h1>
+</header>
 
-<div id="loginBox">
-  <h3>Admin Login</h3>
-  <input type="text" id="user" placeholder="Username"><br>
-  <input type="password" id="pass" placeholder="Password"><br>
-  <button onclick="login()">Login</button>
-  <p id="msg"></p>
-</div>
+<section>
 
-<div id="adminPanel">
-  <h2>Admin Panel</h2>
-  <p>You are now "logged in"</p>
-  <textarea rows="6" cols="40">Edit content here...</textarea>
-</div>
+  <h2>About Me</h2>
+  <div class="box" id="aboutText">
+    I am a web developer passionate about building websites.
+  </div>
+
+  <h2>Projects</h2>
+  <div class="box" id="projectText">
+    - Portfolio Website<br>
+    - Small JavaScript Apps<br>
+  </div>
+
+  <button onclick="toggleEditor()">Edit Mode</button>
+
+  <div id="editor">
+    <h3>Edit Content (Local Only)</h3>
+
+    <p>About:</p>
+    <textarea id="aboutInput"></textarea>
+
+    <p>Projects:</p>
+    <textarea id="projectInput"></textarea>
+
+    <button onclick="save()">Save</button>
+  </div>
+
+</section>
 
 <script>
-function login() {
-  const user = document.getElementById("user").value;
-  const pass = document.getElementById("pass").value;
+function toggleEditor() {
+  const editor = document.getElementById("editor");
 
-  // ❌ THIS IS NOT SECURE (visible in source code)
-  if (user === "Fj121" && pass === "121") {
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("adminPanel").style.display = "block";
+  if (editor.style.display === "none" || editor.style.display === "") {
+    editor.style.display = "block";
+
+    document.getElementById("aboutInput").value =
+      document.getElementById("aboutText").innerText;
+
+    document.getElementById("projectInput").value =
+      document.getElementById("projectText").innerText;
   } else {
-    document.getElementById("msg").innerText = "Wrong login";
+    editor.style.display = "none";
   }
+}
+
+function save() {
+  document.getElementById("aboutText").innerText =
+    document.getElementById("aboutInput").value;
+
+  document.getElementById("projectText").innerText =
+    document.getElementById("projectInput").value;
+
+  alert("Saved (only in your browser)");
 }
 </script>
 
