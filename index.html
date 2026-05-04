@@ -2,89 +2,95 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Advanced Portfolio</title>
+<title>Premium Portfolio</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-:root {
-  --bg: #0f172a;
-  --card: #1e293b;
-  --text: #e2e8f0;
-  --accent: #38bdf8;
-}
-
-.light {
-  --bg: #f8fafc;
-  --card: #e2e8f0;
-  --text: #0f172a;
-  --accent: #2563eb;
-}
-
+/* ====== PREMIUM BACKGROUND ====== */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  transition: 0.3s;
+  color: white;
+  background: linear-gradient(-45deg,#0f172a,#1e293b,#0b1220,#111827);
+  background-size: 400% 400%;
+  animation: gradient 12s ease infinite;
+  overflow-x: hidden;
 }
 
-/* NAVBAR */
-nav {
+@keyframes gradient {
+  0% {background-position:0% 50%}
+  50% {background-position:100% 50%}
+  100% {background-position:0% 50%}
+}
+
+/* ===== GLASS EFFECT ===== */
+.glass {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* ===== LOGIN SCREEN ===== */
+#login {
   position: fixed;
-  top: 0;
-  width: 100%;
-  background: var(--card);
+  inset: 0;
   display: flex;
-  justify-content: space-between;
-  padding: 15px 20px;
-  z-index: 1000;
-}
-
-nav a {
-  color: var(--text);
-  margin: 0 10px;
-  text-decoration: none;
-}
-
-/* HERO */
-.hero {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.loginBox {
+  padding: 30px;
+  width: 320px;
   text-align: center;
 }
 
-.hero h1 {
-  font-size: 40px;
+input {
+  width: 90%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: none;
+  outline: none;
 }
 
-.typing {
-  color: var(--accent);
-  border-right: 2px solid var(--accent);
-  white-space: nowrap;
-  overflow: hidden;
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #38bdf8;
+  color: black;
+  font-weight: bold;
 }
 
-/* SECTIONS */
-section {
-  padding: 80px 20px;
+/* ===== MAIN APP ===== */
+#app {
+  display: none;
+}
+
+header {
+  padding: 20px;
+  text-align: center;
+}
+
+.container {
   max-width: 1000px;
   margin: auto;
+  padding: 20px;
 }
 
-/* CARDS */
+/* ===== CARDS ===== */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
   gap: 15px;
 }
 
 .card {
-  background: var(--card);
   padding: 15px;
-  border-radius: 10px;
   transition: 0.3s;
 }
 
@@ -92,237 +98,201 @@ section {
   transform: translateY(-5px);
 }
 
-/* BUTTONS */
-button {
-  padding: 10px;
-  cursor: pointer;
-  border: none;
-  background: var(--accent);
-  color: white;
-  margin: 5px;
-  border-radius: 5px;
-}
-
-/* EDIT PANEL */
-#editor {
-  display: none;
-  background: var(--card);
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 10px;
-}
-
-/* MODAL */
+/* ===== MODAL ===== */
 .modal {
   display: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background: rgba(0,0,0,0.7);
   justify-content: center;
   align-items: center;
 }
 
-.modal-content {
-  background: var(--card);
+.modalBox {
   padding: 20px;
-  border-radius: 10px;
   width: 300px;
 }
 
-/* SKILLS */
-.skill-bar {
-  background: #334155;
-  border-radius: 5px;
-  margin: 5px 0;
+/* ===== EDIT PANEL ===== */
+#adminPanel {
+  display: none;
+  margin-top: 20px;
+  padding: 15px;
 }
 
-.skill-fill {
-  height: 10px;
-  background: var(--accent);
-  width: 0;
-}
-
-/* FADE */
-.fade {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: 0.6s;
-}
-
-.show {
-  opacity: 1;
-  transform: translateY(0);
+/* ===== WARNING TEXT ===== */
+.warn {
+  color: #f87171;
+  font-size: 14px;
 }
 </style>
 </head>
 
 <body>
 
-<nav>
-  <div><b>MyPortfolio</b></div>
-  <div>
-    <a href="#home">Home</a>
-    <a href="#projects">Projects</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-    <button onclick="toggleTheme()">🌗</button>
-    <button onclick="toggleEdit()">Edit</button>
-  </div>
-</nav>
+<!-- ================= LOGIN ================= -->
+<div id="login">
+  <div class="loginBox glass">
+    <h2>Admin Access</h2>
+    <p class="warn">Protected Area</p>
 
-<!-- HERO -->
-<div class="hero" id="home">
-  <h1>Hi, I'm a Developer</h1>
-  <div class="typing" id="typing"></div>
+    <input id="user" placeholder="Username">
+    <input id="pass" type="password" placeholder="Password">
+
+    <button onclick="login()">Login</button>
+
+    <p id="msg"></p>
+  </div>
 </div>
 
-<!-- PROJECTS -->
-<section id="projects" class="fade">
+<!-- ================= APP ================= -->
+<div id="app">
+
+<header class="glass">
+  <h1>Premium Portfolio</h1>
+  <p>Frontend Developer • UI Designer • Creator</p>
+</header>
+
+<div class="container">
+
   <h2>Projects</h2>
 
-  <input id="search" placeholder="Search projects..." onkeyup="filterProjects()">
+  <input id="search" placeholder="Search..." onkeyup="filter()">
 
-  <div class="grid" id="projectGrid"></div>
+  <div class="grid" id="grid"></div>
 
-  <div id="editor">
-    <h3>Edit Mode</h3>
-    <input id="newProject" placeholder="New project name">
-    <button onclick="addProject()">Add Project</button>
+  <div id="adminPanel" class="glass">
+    <h3>Admin Panel</h3>
+    <input id="newProject" placeholder="New project">
+    <button onclick="add()">Add</button>
   </div>
-</section>
 
-<!-- ABOUT -->
-<section id="about" class="fade">
-  <h2>About Me</h2>
-  <p id="aboutText">
-    I am a passionate developer building modern web experiences.
-  </p>
+</div>
+</div>
 
-  <h3>Skills</h3>
-
-  <div>HTML</div>
-  <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
-
-  <div>CSS</div>
-  <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
-
-  <div>JavaScript</div>
-  <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="fade">
-  <h2>Contact</h2>
-
-  <input placeholder="Your email">
-  <br><br>
-  <textarea placeholder="Message"></textarea>
-  <br>
-  <button onclick="alert('No backend connected')">Send</button>
-</section>
-
-<!-- MODAL -->
+<!-- ================= MODAL ================= -->
 <div class="modal" id="modal">
-  <div class="modal-content">
-    <h3 id="modalTitle"></h3>
-    <p>Project details here...</p>
-    <button onclick="closeModal()">Close</button>
+  <div class="modalBox glass">
+    <h3 id="title"></h3>
+    <button onclick="closeM()">Close</button>
   </div>
 </div>
 
 <script>
-// THEME
-function toggleTheme() {
-  document.body.classList.toggle("light");
-}
 
-// TYPING EFFECT
-const text = "Frontend Developer • UI Designer • Coder";
-let i = 0;
-function type() {
-  if (i < text.length) {
-    document.getElementById("typing").innerHTML += text.charAt(i);
-    i++;
-    setTimeout(type, 50);
-  }
-}
-type();
+/* ================= FAKE BRUTE FORCE PROTECTION ================= */
 
-// PROJECTS
+let attempts = parseInt(localStorage.getItem("attempts")) || 0;
+let lockedUntil = localStorage.getItem("lock") || 0;
+
+/* ================= DATA ================= */
+
 let projects = JSON.parse(localStorage.getItem("projects")) || [
-  "Portfolio Website",
-  "Todo App",
-  "Weather App"
+  "Luxury Portfolio UI",
+  "Animated Dashboard",
+  "JavaScript App Suite"
 ];
 
-function renderProjects() {
-  const grid = document.getElementById("projectGrid");
+/* ================= LOGIN ================= */
+
+function login() {
+  const now = Date.now();
+
+  if (now < lockedUntil) {
+    document.getElementById("msg").innerText =
+      "Locked. Try again later.";
+    return;
+  }
+
+  let u = document.getElementById("user").value;
+  let p = document.getElementById("pass").value;
+
+  // FAKE CHECK (NOT SECURE)
+  if (u === "Fj121" && p === "121") {
+    localStorage.setItem("attempts", 0);
+    enterApp();
+  } else {
+    attempts++;
+    localStorage.setItem("attempts", attempts);
+
+    if (attempts >= 5) {
+      lockedUntil = Date.now() + 30000; // 30 sec lock
+      localStorage.setItem("lock", lockedUntil);
+      document.getElementById("msg").innerText =
+        "Too many attempts. Locked for 30s.";
+    } else {
+      document.getElementById("msg").innerText =
+        "Wrong credentials (" + attempts + "/5)";
+    }
+  }
+}
+
+/* ================= ENTER ================= */
+
+function enterApp() {
+  document.getElementById("login").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  render();
+}
+
+/* ================= PROJECTS ================= */
+
+function render() {
+  let grid = document.getElementById("grid");
   grid.innerHTML = "";
-  projects.forEach((p, index) => {
+
+  projects.forEach((p,i)=>{
     grid.innerHTML += `
-      <div class="card">
+      <div class="card glass">
         <h3>${p}</h3>
-        <button onclick="openModal('${p}')">View</button>
-        <button onclick="deleteProject(${index})">Delete</button>
+        <button onclick="openM('${p}')">View</button>
       </div>
     `;
   });
 }
-renderProjects();
 
-function addProject() {
-  const val = document.getElementById("newProject").value;
-  if (val) {
+function add() {
+  let val = document.getElementById("newProject").value;
+  if(val) {
     projects.push(val);
-    save();
-    renderProjects();
+    localStorage.setItem("projects", JSON.stringify(projects));
+    render();
   }
 }
 
-function deleteProject(i) {
-  projects.splice(i, 1);
-  save();
-  renderProjects();
-}
+/* ================= SEARCH ================= */
 
-function save() {
-  localStorage.setItem("projects", JSON.stringify(projects));
-}
-
-// SEARCH
-function filterProjects() {
-  let input = document.getElementById("search").value.toLowerCase();
-  document.querySelectorAll(".card").forEach(card => {
-    card.style.display = card.innerText.toLowerCase().includes(input)
-      ? "block" : "none";
+function filter() {
+  let q = document.getElementById("search").value.toLowerCase();
+  document.querySelectorAll(".card").forEach(c=>{
+    c.style.display = c.innerText.toLowerCase().includes(q)
+    ? "block" : "none";
   });
 }
 
-// MODAL
-function openModal(title) {
-  document.getElementById("modal").style.display = "flex";
-  document.getElementById("modalTitle").innerText = title;
-}
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
+/* ================= MODAL ================= */
+
+function openM(t){
+  document.getElementById("modal").style.display="flex";
+  document.getElementById("title").innerText=t;
 }
 
-// EDIT MODE
-function toggleEdit() {
-  let e = document.getElementById("editor");
-  e.style.display = e.style.display === "block" ? "none" : "block";
+function closeM(){
+  document.getElementById("modal").style.display="none";
 }
 
-// SCROLL ANIMATION
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) e.target.classList.add("show");
-  });
-});
+/* ================= INIT ================= */
 
-document.querySelectorAll(".fade").forEach(el => obs.observe(el));
+render();
+
+/* ================= OPTIONAL "DEV DETECTION" (FAKE) ================= */
+
+setInterval(()=>{
+  if(window.outerWidth - window.innerWidth > 200){
+    console.clear();
+  }
+},1000);
+
 </script>
 
 </body>
