@@ -1,110 +1,328 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Portfolio</title>
-  <style>
-    body { font-family: Arial; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<title>Advanced Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    header {
-      background: #111;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #e2e8f0;
+  --accent: #38bdf8;
+}
 
-    section {
-      padding: 20px;
-      max-width: 800px;
-      margin: auto;
-    }
+.light {
+  --bg: #f8fafc;
+  --card: #e2e8f0;
+  --text: #0f172a;
+  --accent: #2563eb;
+}
 
-    .box {
-      border: 1px solid #ddd;
-      padding: 15px;
-      margin-top: 10px;
-    }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: 0.3s;
+}
 
-    #editor {
-      display: none;
-      margin-top: 20px;
-      background: #f4f4f4;
-      padding: 15px;
-    }
+/* NAVBAR */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--card);
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 20px;
+  z-index: 1000;
+}
 
-    textarea {
-      width: 100%;
-      height: 100px;
-    }
+nav a {
+  color: var(--text);
+  margin: 0 10px;
+  text-decoration: none;
+}
 
-    button {
-      padding: 10px 15px;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-  </style>
+/* HERO */
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 40px;
+}
+
+.typing {
+  color: var(--accent);
+  border-right: 2px solid var(--accent);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* SECTIONS */
+section {
+  padding: 80px 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* CARDS */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  background: var(--card);
+  padding: 15px;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* BUTTONS */
+button {
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  background: var(--accent);
+  color: white;
+  margin: 5px;
+  border-radius: 5px;
+}
+
+/* EDIT PANEL */
+#editor {
+  display: none;
+  background: var(--card);
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+/* MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+}
+
+/* SKILLS */
+.skill-bar {
+  background: #334155;
+  border-radius: 5px;
+  margin: 5px 0;
+}
+
+.skill-fill {
+  height: 10px;
+  background: var(--accent);
+  width: 0;
+}
+
+/* FADE */
+.fade {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 0.6s;
+}
+
+.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
 </head>
 
 <body>
 
-<header>
-  <h1>My Portfolio</h1>
-</header>
-
-<section>
-
-  <h2>About Me</h2>
-  <div class="box" id="aboutText">
-    I am a web developer passionate about building websites.
+<nav>
+  <div><b>MyPortfolio</b></div>
+  <div>
+    <a href="#home">Home</a>
+    <a href="#projects">Projects</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <button onclick="toggleTheme()">🌗</button>
+    <button onclick="toggleEdit()">Edit</button>
   </div>
+</nav>
 
+<!-- HERO -->
+<div class="hero" id="home">
+  <h1>Hi, I'm a Developer</h1>
+  <div class="typing" id="typing"></div>
+</div>
+
+<!-- PROJECTS -->
+<section id="projects" class="fade">
   <h2>Projects</h2>
-  <div class="box" id="projectText">
-    - Portfolio Website<br>
-    - Small JavaScript Apps<br>
-  </div>
 
-  <button onclick="toggleEditor()">Edit Mode</button>
+  <input id="search" placeholder="Search projects..." onkeyup="filterProjects()">
+
+  <div class="grid" id="projectGrid"></div>
 
   <div id="editor">
-    <h3>Edit Content (Local Only)</h3>
-
-    <p>About:</p>
-    <textarea id="aboutInput"></textarea>
-
-    <p>Projects:</p>
-    <textarea id="projectInput"></textarea>
-
-    <button onclick="save()">Save</button>
+    <h3>Edit Mode</h3>
+    <input id="newProject" placeholder="New project name">
+    <button onclick="addProject()">Add Project</button>
   </div>
-
 </section>
 
+<!-- ABOUT -->
+<section id="about" class="fade">
+  <h2>About Me</h2>
+  <p id="aboutText">
+    I am a passionate developer building modern web experiences.
+  </p>
+
+  <h3>Skills</h3>
+
+  <div>HTML</div>
+  <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+
+  <div>CSS</div>
+  <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+
+  <div>JavaScript</div>
+  <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="fade">
+  <h2>Contact</h2>
+
+  <input placeholder="Your email">
+  <br><br>
+  <textarea placeholder="Message"></textarea>
+  <br>
+  <button onclick="alert('No backend connected')">Send</button>
+</section>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h3 id="modalTitle"></h3>
+    <p>Project details here...</p>
+    <button onclick="closeModal()">Close</button>
+  </div>
+</div>
+
 <script>
-function toggleEditor() {
-  const editor = document.getElementById("editor");
+// THEME
+function toggleTheme() {
+  document.body.classList.toggle("light");
+}
 
-  if (editor.style.display === "none" || editor.style.display === "") {
-    editor.style.display = "block";
+// TYPING EFFECT
+const text = "Frontend Developer • UI Designer • Coder";
+let i = 0;
+function type() {
+  if (i < text.length) {
+    document.getElementById("typing").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(type, 50);
+  }
+}
+type();
 
-    document.getElementById("aboutInput").value =
-      document.getElementById("aboutText").innerText;
+// PROJECTS
+let projects = JSON.parse(localStorage.getItem("projects")) || [
+  "Portfolio Website",
+  "Todo App",
+  "Weather App"
+];
 
-    document.getElementById("projectInput").value =
-      document.getElementById("projectText").innerText;
-  } else {
-    editor.style.display = "none";
+function renderProjects() {
+  const grid = document.getElementById("projectGrid");
+  grid.innerHTML = "";
+  projects.forEach((p, index) => {
+    grid.innerHTML += `
+      <div class="card">
+        <h3>${p}</h3>
+        <button onclick="openModal('${p}')">View</button>
+        <button onclick="deleteProject(${index})">Delete</button>
+      </div>
+    `;
+  });
+}
+renderProjects();
+
+function addProject() {
+  const val = document.getElementById("newProject").value;
+  if (val) {
+    projects.push(val);
+    save();
+    renderProjects();
   }
 }
 
-function save() {
-  document.getElementById("aboutText").innerText =
-    document.getElementById("aboutInput").value;
-
-  document.getElementById("projectText").innerText =
-    document.getElementById("projectInput").value;
-
-  alert("Saved (only in your browser)");
+function deleteProject(i) {
+  projects.splice(i, 1);
+  save();
+  renderProjects();
 }
+
+function save() {
+  localStorage.setItem("projects", JSON.stringify(projects));
+}
+
+// SEARCH
+function filterProjects() {
+  let input = document.getElementById("search").value.toLowerCase();
+  document.querySelectorAll(".card").forEach(card => {
+    card.style.display = card.innerText.toLowerCase().includes(input)
+      ? "block" : "none";
+  });
+}
+
+// MODAL
+function openModal(title) {
+  document.getElementById("modal").style.display = "flex";
+  document.getElementById("modalTitle").innerText = title;
+}
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+}
+
+// EDIT MODE
+function toggleEdit() {
+  let e = document.getElementById("editor");
+  e.style.display = e.style.display === "block" ? "none" : "block";
+}
+
+// SCROLL ANIMATION
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add("show");
+  });
+});
+
+document.querySelectorAll(".fade").forEach(el => obs.observe(el));
 </script>
 
 </body>
