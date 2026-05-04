@@ -1,222 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Portfolio</title>
-
-<style>
-:root {
-  --bg: #0b1220;
-  --card: rgba(255,255,255,0.06);
-  --text: #ffffff;
-  --muted: #94a3b8;
-  --accent: #6366f1;
-}
-
-.light {
-  --bg: #f8fafc;
-  --card: rgba(0,0,0,0.05);
-  --text: #0f172a;
-  --muted: #475569;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  scroll-behavior: smooth;
-  font-family: Arial, sans-serif;
-}
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  transition: 0.3s;
-}
-
-/* NAV */
-nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  padding: 15px;
-  backdrop-filter: blur(10px);
-  background: rgba(0,0,0,0.3);
-}
-
-nav a {
-  color: var(--text);
-  text-decoration: none;
-  font-weight: bold;
-  opacity: 0.8;
-}
-
-nav a:hover {
-  color: var(--accent);
-  opacity: 1;
-}
-
-/* HERO */
-header {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 20px;
-  background: radial-gradient(circle at top, #4f46e5, transparent);
-}
-
-header h1 {
-  font-size: 48px;
-}
-
-header p {
-  color: var(--muted);
-  margin-top: 10px;
-}
-
-/* SECTIONS */
-section {
-  max-width: 1000px;
-  margin: auto;
-  padding: 100px 20px;
-}
-
-h2 {
-  margin-bottom: 20px;
-  border-left: 4px solid var(--accent);
-  padding-left: 10px;
-}
-
-/* CARDS */
-.card {
-  background: var(--card);
-  padding: 20px;
-  border-radius: 15px;
-  margin-bottom: 15px;
-  backdrop-filter: blur(10px);
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-/* PROJECT GRID */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 15px;
-}
-
-.project {
-  background: var(--card);
-  padding: 20px;
-  border-radius: 15px;
-  transition: 0.3s;
-}
-
-.project:hover {
-  transform: scale(1.05);
-}
-
-/* BUTTON */
-button {
-  padding: 10px 15px;
-  background: var(--accent);
-  border: none;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-
-/* THEME BUTTON */
-.toggle {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-}
-
-/* FOOTER */
-footer {
-  text-align: center;
-  padding: 30px;
-  color: var(--muted);
-}
-</style>
+  <title>My Website</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 80px; }
+    #adminPanel { display: none; margin-top: 20px; }
+    input { padding: 10px; margin: 5px; }
+    button { padding: 10px 15px; cursor: pointer; }
+  </style>
 </head>
-
 <body>
 
-<nav>
-  <a href="#home">Home</a>
-  <a href="#about">About</a>
-  <a href="#projects">Projects</a>
-  <a href="#contact">Contact</a>
-</nav>
+<h1>Welcome to My Website</h1>
 
-<header id="home">
-  <h1>Your Name</h1>
-  <p>Web Developer • Designer • Creator</p>
-</header>
+<div id="loginBox">
+  <h3>Admin Login</h3>
+  <input type="text" id="user" placeholder="Username"><br>
+  <input type="password" id="pass" placeholder="Password"><br>
+  <button onclick="login()">Login</button>
+  <p id="msg"></p>
+</div>
 
-<section id="about">
-  <h2>About Me</h2>
-  <div class="card">
-    I am a passionate developer who builds modern, clean, and responsive websites.
-    I enjoy creating smooth user experiences and learning new technologies.
-  </div>
-</section>
+<div id="adminPanel">
+  <h2>Admin Panel</h2>
+  <p>You are now "logged in"</p>
+  <textarea rows="6" cols="40">Edit content here...</textarea>
+</div>
 
-<section id="projects">
-  <h2>Projects</h2>
+<script>
+function login() {
+  const user = document.getElementById("user").value;
+  const pass = document.getElementById("pass").value;
 
-  <div class="grid">
-    <div class="project">
-      <h3>Portfolio Website</h3>
-      <p>A modern responsive personal website.</p>
-    </div>
-
-    <div class="project">
-      <h3>Web App</h3>
-      <p>Interactive JavaScript-based application.</p>
-    </div>
-
-    <div class="project">
-      <h3>UI Design</h3>
-      <p>Clean and modern interface design.</p>
-    </div>
-  </div>
-</section>
-
-<section id="contact">
-  <h2>Contact</h2>
-  <div class="card">
-    Email: yourname@email.com
-    <br><br>
-    <button onclick="alert('Message sent!')">Say Hello 👋</button>
-  </div>
-</section>
-
-<footer>
-  © 2026 My Portfolio — Built with HTML & CSS
-</footer>
-
-<!-- Theme Toggle -->
-<button class="toggle" onclick="document.body.classList.toggle('light')">
-  🌓 Theme
-</button>
+  // ❌ THIS IS NOT SECURE (visible in source code)
+  if (user === "Fj121" && pass === "121") {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("adminPanel").style.display = "block";
+  } else {
+    document.getElementById("msg").innerText = "Wrong login";
+  }
+}
+</script>
 
 </body>
 </html>
