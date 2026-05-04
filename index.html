@@ -2,296 +2,130 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Premium Portfolio</title>
+<title>My Portfolio</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* ====== PREMIUM BACKGROUND ====== */
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: Arial;
+  background: #0f172a;
   color: white;
-  background: linear-gradient(-45deg,#0f172a,#1e293b,#0b1220,#111827);
-  background-size: 400% 400%;
-  animation: gradient 12s ease infinite;
-  overflow-x: hidden;
-}
-
-@keyframes gradient {
-  0% {background-position:0% 50%}
-  50% {background-position:100% 50%}
-  100% {background-position:0% 50%}
-}
-
-/* ===== GLASS EFFECT ===== */
-.glass {
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-}
-
-/* ===== LOGIN SCREEN ===== */
-#login {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.loginBox {
-  padding: 30px;
-  width: 320px;
-  text-align: center;
-}
-
-input {
-  width: 90%;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-}
-
-button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  background: #38bdf8;
-  color: black;
-  font-weight: bold;
-}
-
-/* ===== MAIN APP ===== */
-#app {
-  display: none;
 }
 
 header {
-  padding: 20px;
+  padding: 40px;
   text-align: center;
+  background: #111827;
 }
 
 .container {
-  max-width: 1000px;
+  max-width: 900px;
   margin: auto;
   padding: 20px;
 }
 
-/* ===== CARDS ===== */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
-  gap: 15px;
-}
-
 .card {
+  background: #1e293b;
   padding: 15px;
-  transition: 0.3s;
+  margin: 10px 0;
+  border-radius: 10px;
 }
 
-.card:hover {
-  transform: translateY(-5px);
+button {
+  padding: 10px;
+  background: #38bdf8;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-top: 10px;
 }
 
-/* ===== MODAL ===== */
-.modal {
+#editor {
   display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
-  justify-content: center;
-  align-items: center;
-}
-
-.modalBox {
-  padding: 20px;
-  width: 300px;
-}
-
-/* ===== EDIT PANEL ===== */
-#adminPanel {
-  display: none;
+  background: #111827;
+  padding: 15px;
+  border-radius: 10px;
   margin-top: 20px;
-  padding: 15px;
 }
 
-/* ===== WARNING TEXT ===== */
-.warn {
-  color: #f87171;
-  font-size: 14px;
+input, textarea {
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ================= LOGIN ================= -->
-<div id="login">
-  <div class="loginBox glass">
-    <h2>Admin Access</h2>
-    <p class="warn">Protected Area</p>
-
-    <input id="user" placeholder="Username">
-    <input id="pass" type="password" placeholder="Password">
-
-    <button onclick="login()">Login</button>
-
-    <p id="msg"></p>
-  </div>
-</div>
-
-<!-- ================= APP ================= -->
-<div id="app">
-
-<header class="glass">
-  <h1>Premium Portfolio</h1>
-  <p>Frontend Developer • UI Designer • Creator</p>
+<header>
+  <h1>My Portfolio</h1>
+  <p>Web Developer • Designer • Creator</p>
 </header>
 
 <div class="container">
 
+  <h2>About Me</h2>
+  <div class="card" id="about">
+    I build modern, clean, and responsive websites.
+  </div>
+
   <h2>Projects</h2>
+  <div id="projects"></div>
 
-  <input id="search" placeholder="Search..." onkeyup="filter()">
+  <button onclick="toggleEditor()">Edit Mode</button>
 
-  <div class="grid" id="grid"></div>
+  <div id="editor">
+    <h3>Edit Content (Local Only)</h3>
 
-  <div id="adminPanel" class="glass">
-    <h3>Admin Panel</h3>
-    <input id="newProject" placeholder="New project">
-    <button onclick="add()">Add</button>
+    <textarea id="aboutInput"></textarea>
+
+    <input id="projectInput" placeholder="New project name">
+    <button onclick="addProject()">Add Project</button>
   </div>
 
-</div>
-</div>
-
-<!-- ================= MODAL ================= -->
-<div class="modal" id="modal">
-  <div class="modalBox glass">
-    <h3 id="title"></h3>
-    <button onclick="closeM()">Close</button>
-  </div>
 </div>
 
 <script>
 
-/* ================= FAKE BRUTE FORCE PROTECTION ================= */
-
-let attempts = parseInt(localStorage.getItem("attempts")) || 0;
-let lockedUntil = localStorage.getItem("lock") || 0;
-
-/* ================= DATA ================= */
-
 let projects = JSON.parse(localStorage.getItem("projects")) || [
-  "Luxury Portfolio UI",
-  "Animated Dashboard",
-  "JavaScript App Suite"
+  "Portfolio Website",
+  "Weather App",
+  "Todo App"
 ];
 
-/* ================= LOGIN ================= */
-
-function login() {
-  const now = Date.now();
-
-  if (now < lockedUntil) {
-    document.getElementById("msg").innerText =
-      "Locked. Try again later.";
-    return;
-  }
-
-  let u = document.getElementById("user").value;
-  let p = document.getElementById("pass").value;
-
-  // FAKE CHECK (NOT SECURE)
-  if (u === "Fj121" && p === "121") {
-    localStorage.setItem("attempts", 0);
-    enterApp();
-  } else {
-    attempts++;
-    localStorage.setItem("attempts", attempts);
-
-    if (attempts >= 5) {
-      lockedUntil = Date.now() + 30000; // 30 sec lock
-      localStorage.setItem("lock", lockedUntil);
-      document.getElementById("msg").innerText =
-        "Too many attempts. Locked for 30s.";
-    } else {
-      document.getElementById("msg").innerText =
-        "Wrong credentials (" + attempts + "/5)";
-    }
-  }
-}
-
-/* ================= ENTER ================= */
-
-function enterApp() {
-  document.getElementById("login").style.display = "none";
-  document.getElementById("app").style.display = "block";
-  render();
-}
-
-/* ================= PROJECTS ================= */
-
 function render() {
-  let grid = document.getElementById("grid");
-  grid.innerHTML = "";
+  const container = document.getElementById("projects");
+  container.innerHTML = "";
 
-  projects.forEach((p,i)=>{
-    grid.innerHTML += `
-      <div class="card glass">
-        <h3>${p}</h3>
-        <button onclick="openM('${p}')">View</button>
-      </div>
+  projects.forEach(p => {
+    container.innerHTML += `
+      <div class="card">${p}</div>
     `;
   });
 }
+render();
 
-function add() {
-  let val = document.getElementById("newProject").value;
-  if(val) {
+/* ===== EDIT MODE (HIDDEN TOOL) ===== */
+function toggleEditor() {
+  const e = document.getElementById("editor");
+
+  e.style.display = e.style.display === "block" ? "none" : "block";
+
+  document.getElementById("aboutInput").value =
+    document.getElementById("about").innerText;
+}
+
+/* ===== ADD PROJECT ===== */
+function addProject() {
+  let val = document.getElementById("projectInput").value;
+  if (val) {
     projects.push(val);
     localStorage.setItem("projects", JSON.stringify(projects));
     render();
   }
 }
-
-/* ================= SEARCH ================= */
-
-function filter() {
-  let q = document.getElementById("search").value.toLowerCase();
-  document.querySelectorAll(".card").forEach(c=>{
-    c.style.display = c.innerText.toLowerCase().includes(q)
-    ? "block" : "none";
-  });
-}
-
-/* ================= MODAL ================= */
-
-function openM(t){
-  document.getElementById("modal").style.display="flex";
-  document.getElementById("title").innerText=t;
-}
-
-function closeM(){
-  document.getElementById("modal").style.display="none";
-}
-
-/* ================= INIT ================= */
-
-render();
-
-/* ================= OPTIONAL "DEV DETECTION" (FAKE) ================= */
-
-setInterval(()=>{
-  if(window.outerWidth - window.innerWidth > 200){
-    console.clear();
-  }
-},1000);
 
 </script>
 
